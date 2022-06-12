@@ -139,9 +139,9 @@ jobs:
     steps:
       - checkout          
       - run:
-        name: Make sure eks is working
-        command: |
-          aws eks update-kubeconfig --region $AWS_REGION  --name Capstone-Cluster
+          name: Make sure eks is working
+          command: |
+            aws eks update-kubeconfig --region $AWS_REGION  --name Capstone-Cluster
       - destroy-environment:
         workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
           
