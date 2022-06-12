@@ -100,8 +100,9 @@ jobs:
           name: Ensure VPC infrastructure exists
           command: |
             aws cloudformation deploy \
-              --template-file infra/final-project-starter.yml \
-              --parameters infra/server-parameters.json \
+              --region=$AWS_DEFAULT_REGION
+              --parameter-file infra/iac-params.json \
+              --template-file infra/infra-iac.yml \
               --tags project=capstone \
               --stack-name "capstone-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
