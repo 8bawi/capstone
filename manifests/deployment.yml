@@ -19,3 +19,12 @@ spec:
         app: app
         color: $COLOR_TEST
     spec:
+      containers:
+      - name: app
+        image: $DOCKER_USERNAME/capstoneProject:$COLOR
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 80
