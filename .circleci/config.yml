@@ -4,6 +4,7 @@
 #
 version: 2.1
 commands:
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -104,7 +105,7 @@ jobs:
               --stack-name "capstone-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
       - destroy-environment:
-        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"    
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"    
 
   deploy-eks:
     docker:
@@ -130,7 +131,7 @@ jobs:
           #    --stack-name "capstone-eks-cluster-${CIRCLE_WORKFLOW_ID:0:7}" \
           #    --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - destroy-environment:
-        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
 
   check-eks-working:
     docker:
@@ -143,7 +144,7 @@ jobs:
           command: |
             aws eks update-kubeconfig --region $AWS_REGION  --name Capstone-Cluster
       - destroy-environment:
-        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
           
   deploy-eks-addon-and-nodegroup:
     docker:
@@ -163,7 +164,7 @@ jobs:
               --tags \
                 Name='eks_worker_nodes'
       - destroy-environment:
-        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
  
 workflows:
   default:
