@@ -6,7 +6,7 @@ Resources:
   CapKubeCluster:
     Type: AWS::EKS::Cluster
     Properties:
-      Name: Capstone-Cluster-green
+      Name: Capstone-Cluster
       ResourcesVpcConfig:
         SubnetIds:
           ## As stated in section above, populate these with your current VPC subnet IDs
