@@ -18,7 +18,7 @@ commands:
           command: |
             echo  Destroy environments << parameters.workflow_id >> 
             aws s3 rm s3://cap-cloudformation-artifacts-bucket-<< parameters.workflow_id >>  --recursive
-            aws cloudformation delete-stack --stack-name capstone-backend-<< parameters.workflow_id >>
+            aws cloudformation delete-stack --stack-name capstone-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name capstone-eks-cluster-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name cap-eks-nodegroup-<< parameters.workflow_id >>
 
@@ -100,12 +100,12 @@ jobs:
           name: Ensure VPC infrastructure exists
           command: |
             aws cloudformation create-stack \
-              --stack-name "capstone-backend-${CIRCLE_WORKFLOW_ID:0:7}" \            
+              --stack-name "capstone-${CIRCLE_WORKFLOW_ID:0:7}" \            
               --template-body infra/infra-iac.yml \              
               --parameters infra/iac-params.json \
               --tags project=capstone \
               --capabilities CAPABILITY_NAMED_IAM \              
-              --region=$AWS_DEFAULT_REGION \              
+              --region=$AWS_DEFAULT_REGION              
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"    
 
