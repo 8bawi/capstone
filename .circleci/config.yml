@@ -103,7 +103,7 @@ jobs:
               --stack-name "capstone-${CIRCLE_WORKFLOW_ID:0:7}" \
               --template-body infra/infra-iac.yml \
               --region $AWS_DEFAULT_REGION \         
-              --tags project=capstone
+
 # aws cloudformation create-stack \
 #   --region region-code \
 #   --stack-name my-eks-vpc-stack \
