@@ -6,26 +6,32 @@ Parameters:
     EnvironmentName:
         Description: The Name of the Env
         Type: String
+        Default: CapstoneProject
 
     VpcCIDR:
         Description: The CIDR of the VPC
         Type: String
+        Default: 10.0.0.0/16        
     
     PublicSub1:
         Description: The CIDR of the 1st PublicSubnet
         Type: String
+        Default: 10.0.1.0/24        
 
     PublicSub2:
         Description: The CIDR of the 1st PublicSubnet
         Type: String
+        Default: 10.0.3.0/24     
     
     PrivateSub1:
         Description: The CIDR of the 1st PublicSubnet
-        Type: String        
+        Type: String
+        Default: 10.0.2.0/24                
 
     PrivateSub2:
         Description: The CIDR of the 1st PublicSubnet
         Type: String
+        Default: 10.0.4.0/24        
 
 Metadata:
   AWS::CloudFormation::Interface:
