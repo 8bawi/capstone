@@ -3,6 +3,25 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+commands:
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      workflow_id:
+        type: string
+
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            echo  Destroy environments << parameters.workflow_id >> 
+            aws s3 rm s3:cap-cloudformation-artifacts-bucket-<< parameters.workflow_id >>  --recursive
+            aws cloudformation delete-stack --stack-name capstone-backend-<< parameters.workflow_id >>
+            aws cloudformation delete-stack --stack-name capstone-eks-cluster-<< parameters.workflow_id >>
+            aws cloudformation delete-stack --stack-name cap-eks-nodegroup-<< parameters.workflow_id >>
+
+
 jobs:
   lint:
     docker:
@@ -69,6 +88,80 @@ jobs:
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
             docker image tag $DOCKERPATH:0.0_$CIRCLE_BRANCH $DOCKERPATH:$CIRCLE_BRANCH
             docker push $DOCKERPATH:$CIRCLE_BRANCH
+  
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    working_directory: ~/repo        
+    steps:
+      - checkout
+      - run:
+          name: Ensure VPC infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file infra/final-project-starter.yml \
+              --tags project=capstone \
+              --stack-name "capstone-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
+      - destroy-environment:
+        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"               
+  deploy-eks:
+    docker:
+      - image: amazon/aws-cli
+    working_directory: ~/repo        
+    steps:
+      - checkout              
+      - run:
+          name: Ensure eks-cluster infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --s3-bucket "cap-cloudformation-artifacts-bucket-${CIRCLE_WORKFLOW_ID:0:7}"  \ 
+              --template-file infra/eks-cluster.yml \
+              --stack-name "capstone-eks-cluster-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --capabilities CAPABILITY_NAMED_IAM \
+              --no-fail-on-empty-changeset \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --tags \
+              Name='CapKubernetesCluster'
+          #  aws cloudformation deploy \
+          #    --template-file infra/eks-cluster.yml \
+          #    --tags project=capstone \
+          #    --stack-name "capstone-eks-cluster-${CIRCLE_WORKFLOW_ID:0:7}" \
+          #    --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+      - destroy-environment:
+        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
+  check-if-eks-is-working:
+    docker:
+      - image: amazon/aws-cli
+    working_directory: ~/repo        
+    steps:
+      - checkout          
+      - run:
+        name: Make sure eks is working
+        command: |
+          aws eks update-kubeconfig --region $AWS_REGION  --name Capstone-Cluster
+      - destroy-environment:
+        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"          
+          
+  deploy-eks-addon-and-nodegroup:
+    docker:
+      - image: amazon/aws-cli
+    working_directory: ~/repo        
+    steps:
+      - checkout          
+      - run:
+          name: Ensure eks-addon and NodeGroup infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --s3-bucket "cap-cloudformation-artifacts-bucket-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --template-file cloudformation/eks-nodegroup.yaml \
+              --stack-name "cap-eks-nodegroup-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --capabilities CAPABILITY_NAMED_IAM \
+              --no-fail-on-empty-changeset \
+              --tags \
+                Name='eks_worker_nodes'
+      - destroy-environment:
+        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
  
 workflows:
   default:
@@ -81,4 +174,23 @@ workflows:
           requires: [lint]
           filters:
             branches:
-              only: [blue, green]      
+              only: [blue, green] 
+      - deploy-infrastructure:
+          filters:
+            branches:
+              only: [blue, green]
+      # - deploy-eks:
+      #     requires: [deploy-infrastructure]
+      #     filters:
+      #       branches:
+      #         only: [blue, green]                     
+      # - check-if-eks-is-working:
+      #     requires: [deploy-eks]
+      #     filters:
+      #       branches:
+      #         only: [blue, green]       
+      # - deploy-eks-addon-and-nodegroup:
+      #     requires: [deploy-eks]
+      #     filters:
+      #       branches:
+      #         only: [blue, green]       
