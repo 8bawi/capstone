@@ -44,7 +44,7 @@ jobs:
   build:
     machine: true
 
-    working_directory: ~/repo/blue-green
+    # working_directory: ~/repo/blue-green
 
     steps:
       - checkout
@@ -52,16 +52,18 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t mada96/capstone_project:0.0_$CIRCLE_BRANCH .
-            docker image ls
+            pwd
+            ls -l
+          #  docker build -t mada96/capstone_project:0.0_$CIRCLE_BRANCH .
+          #  docker image ls
 
-      - run:
-          name: Push Docker Image
-          command: |
-            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
-            DOCKERPATH=mada96/capstone_project
-            docker image tag $DOCKERPATH:0.0 $DOCKERPATH:$CIRCLE_BRANCH
-            docker push $DOCKERPATH:$CIRCLE_BRANCH
+      # - run:
+      #     name: Push Docker Image
+      #     command: |
+      #       echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+      #       DOCKERPATH=mada96/capstone_project
+      #       docker image tag $DOCKERPATH:0.0 $DOCKERPATH:$CIRCLE_BRANCH
+      #       docker push $DOCKERPATH:$CIRCLE_BRANCH
  
 workflows:
   default:
