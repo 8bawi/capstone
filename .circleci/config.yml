@@ -102,9 +102,12 @@ jobs:
             aws cloudformation deploy \
             --stack-name "capstone-${CIRCLE_WORKFLOW_ID:0:7}" \
             --template-file infra/infra-iac.yml \
-            --region=$AWS_DEFAULT_REGION \         
+            --region $AWS_DEFAULT_REGION \         
             --tags project=capstone
-
+# aws cloudformation create-stack \
+#   --region region-code \
+#   --stack-name my-eks-vpc-stack \
+#   --template-url https://s3.us-west-2.amazonaws.com/amazon-eks/cloudformation/2020-10-29/amazon-eks-vpc-private-subnets.yaml
           #  aws cloudformation create-stack \
           #    --stack-name "capstone-${CIRCLE_WORKFLOW_ID:0:7}" \            
           #    --template-body infra/infra-iac.yml \              
