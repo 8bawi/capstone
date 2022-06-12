@@ -64,9 +64,9 @@ jobs:
       - run:
           name: Push Docker Image
           command: |
-            cd blue-green
-            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
             DOCKERPATH=mada96/capstone_project
+            cd blue-green
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
             docker image tag $DOCKERPATH:0.0 $DOCKERPATH:$CIRCLE_BRANCH
             docker push $DOCKERPATH:$CIRCLE_BRANCH
  
