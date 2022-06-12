@@ -1,0 +1,40 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploy Managed Kubernetes Resources - Worker Nodes
+
+Resources:
+  CapKubeNodeGroupRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
+  CapKubeClusterNodegroupFleet:
+    Type: AWS::EKS::Nodegroup
+    Properties:
+      ClusterName: !ImportValue cap-kube-cluster-name
+      NodeRole: !GetAtt CapKubeNodeGroupRole.Arn
+      InstanceTypes:
+        - t3.large
+      ScalingConfig:
+        MinSize: 1
+        DesiredSize: 1
+        MaxSize: 3
+      Labels:
+        cap-kube-node-group: True
+        app: app
+      Subnets:
+        - Fn::ImportValue: PriSub1ID
+        - Fn::ImportValue: PriSub2ID
+      Tags: {"eks_role": "node_group"}

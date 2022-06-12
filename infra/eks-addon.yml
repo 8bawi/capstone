@@ -1,0 +1,15 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploy EKS Addons
+
+Resources:
+  VpcCni:
+    Type: AWS::EKS::Addon
+    Properties:
+      AddonName: vpc-cni
+      AddonVersion: v1.7.10-eksbuild.1
+      ClusterName: !ImportValue cap-kube-cluster-name ## Replace this with your cluster name
+      ResolveConflicts: OVERWRITE
+      Tags:
+        - Key: eks_addon
+          Value: True

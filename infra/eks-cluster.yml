@@ -1,0 +1,41 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploy Managed Kubernetes Resources - Cluster
+
+Resources:
+  CapKubeCluster:
+    Type: AWS::EKS::Cluster
+    Properties:
+      Name: Capstone-Cluster
+      ResourcesVpcConfig:
+        SubnetIds:
+          ## As stated in section above, populate these with your current VPC subnet IDs
+          - Fn::ImportValue: PubSub1ID 
+          - Fn::ImportValue: PubSub2ID
+          - Fn::ImportValue: PriSub1ID
+          - Fn::ImportValue: PriSub2ID
+      RoleArn: !GetAtt CapKubeClusterRole.Arn
+      Version: "1.20"
+
+  CapKubeClusterRole:
+    ## EKS needs permissions to interact with nodes and other AWS Services https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - eks.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+
+Outputs:
+  CapKubeClusterName:
+    Description: Name of managed EKS cluster.
+    Value: !Ref CapKubeCluster
+    Export:
+      Name: cap-kube-cluster-name
