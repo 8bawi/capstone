@@ -101,10 +101,11 @@ jobs:
           command: |
             aws cloudformation create-stack \
               --region=$AWS_DEFAULT_REGION \
+              --template-body infra/infra-iac.yml \              
               --parameters infra/iac-params.json \
-              --template-file infra/infra-iac.yml \
               --tags project=capstone \
               --stack-name "capstone-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --capabilities CAPABILITY_NAMED_IAM \              
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"    
