@@ -15,10 +15,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            ls -l
             python3 -m venv venv
             . venv/bin/activate
-            cd /root/repo/blue-green/
             make install
             # Install hadolint
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
@@ -47,13 +45,13 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            sh /root/repo/blue-green/build_docker.sh $CIRCLE_BRANCH
+            sh blue-green/build_docker.sh $CIRCLE_BRANCH
 
       - run:
           name: Push Docker Image
           command: |
             docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-            sh /blue-green/push_docker.sh $CIRCLE_BRANCH
+            sh blue-green/push_docker.sh $CIRCLE_BRANCH
  
 workflows:
   default:
