@@ -52,13 +52,16 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            sh blue-green/build_docker.sh $CIRCLE_BRANCH
+            docker build -t mada96/capstone_project:0.0_$CIRCLE_BRANCH .
+            docker image ls
 
       - run:
           name: Push Docker Image
           command: |
             echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
-            sh blue-green/push_docker.sh $CIRCLE_BRANCH
+            DOCKERPATH=mada96/capstone_project
+            docker image tag $DOCKERPATH:0.0 $DOCKERPATH:$CIRCLE_BRANCH
+            docker push $DOCKERPATH:$CIRCLE_BRANCH
  
 workflows:
   default:
