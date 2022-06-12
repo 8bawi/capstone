@@ -42,9 +42,7 @@ jobs:
             cd blue-green
             make lint
   build:
-    docker:
-      # Use the same Docker base as the project
-      - image: python:3.7.3-stretch
+    machine: true
 
     working_directory: ~/repo/blue-green
 
@@ -59,7 +57,7 @@ jobs:
       - run:
           name: Push Docker Image
           command: |
-            docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
             sh blue-green/push_docker.sh $CIRCLE_BRANCH
  
 workflows:
