@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - checkout
-      
+
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_cachine: true
@@ -58,8 +58,8 @@ jobs:
           name: Build Docker Image
           command: |
             cd blue-green
-           docker build -t mada96/capstone_project:0.0_$CIRCLE_BRANCH .
-           docker image ls
+            docker build -t mada96/capstone_project:0.0_$CIRCLE_BRANCH .
+            docker image ls
 
       - run:
           name: Push Docker Image
