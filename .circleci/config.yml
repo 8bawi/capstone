@@ -99,9 +99,9 @@ jobs:
       - run:
           name: Ensure VPC infrastructure exists
           command: |
-            aws cloudformation create-stack \
+            aws cloudformation deploy \
             --stack-name "capstone-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --template-body infra/infra-iac.yml \
+            --template-file infra/infra-iac.yml \
             --region=$AWS_DEFAULT_REGION \         
             --tags project=capstone
 
