@@ -67,7 +67,7 @@ jobs:
             DOCKERPATH=mada96/capstone_project
             cd blue-green
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-            docker image tag $DOCKERPATH:0.0 $DOCKERPATH:$CIRCLE_BRANCH
+            docker image tag $DOCKERPATH:0.0_$CIRCLE_BRANCH $DOCKERPATH:$CIRCLE_BRANCH
             docker push $DOCKERPATH:$CIRCLE_BRANCH
  
 workflows:
