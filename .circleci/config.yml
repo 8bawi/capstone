@@ -54,13 +54,13 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            sh build_docker.sh $CIRCLE_BRANCH
+            sh blue-green/build_docker.sh $CIRCLE_BRANCH
 
       - run:
           name: Push Docker Image
           command: |
             docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-            sh push_docker.sh $CIRCLE_BRANCH
+            sh blue-green/push_docker.sh $CIRCLE_BRANCH
  
 workflows:
   default:
