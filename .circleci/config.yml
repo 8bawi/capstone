@@ -69,8 +69,8 @@ workflows:
           filters:
             branches:
               only: [blue, green]
-      # - build:
-      #     requires: [lint]
-      #     filters:
-      #       branches:
-      #         only: [blue, green]      
+      - build:
+          requires: [lint]
+          filters:
+            branches:
+              only: [blue, green]      
