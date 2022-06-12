@@ -99,13 +99,13 @@ jobs:
       - run:
           name: check if VPC infra already exists
           command: |
-            aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE|grep -i creationtime
+            aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE|grep -i creationtime;
             if test $(echo $?) -eq 1; 
             then aws cloudformation create-stack \
               --stack-name capstone-$CIRCLE_BRANCH \
               --template-body file://infra/infra-iac.yml \
               --region $AWS_DEFAULT_REGION ;
-            fi
+            fi;
       # - run:
       #     name: Ensure VPC infrastructure exists
       #     command: |
