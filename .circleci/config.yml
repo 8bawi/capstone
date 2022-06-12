@@ -192,11 +192,11 @@ workflows:
           filters:
             branches:
               only: [blue, green]
-      # - deploy-eks:
-      #     requires: [deploy-infrastructure]
-      #     filters:
-      #       branches:
-      #         only: [blue, green]                     
+      - deploy-eks:
+          requires: [deploy-infrastructure]
+          filters:
+            branches:
+              only: [blue, green]                     
       # - check-if-eks-is-working:
       #     requires: [deploy-eks]
       #     filters:
