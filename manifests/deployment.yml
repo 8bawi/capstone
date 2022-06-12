@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app_$COLOR_TEST
+  labels:
+    app: app
+    color: $COLOR_TEST
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+      color: $COLOR_TEST
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app
+        color: $COLOR_TEST
+    spec:

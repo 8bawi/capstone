@@ -1,0 +1,40 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: app-blue-green
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - app-gateway
+  http:
+  - name: app-test
+    match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(test=true)(;.*)?$"
+    route:
+    - destination:
+        host: app
+        subset: $COLOR_TEST
+  - name: app-default
+    route:
+    - destination:
+        host: app
+        subset: $COLOR_ACTIVE
+
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: app-blue-green
+spec:
+  host: app
+  subsets:
+  - name: blue
+    labels: 
+      color: blue
+  - name: green
+    labels:
+      color: green
