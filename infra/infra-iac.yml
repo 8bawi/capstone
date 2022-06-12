@@ -234,8 +234,8 @@ Resources:
     ControlPlaneSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties:
-        GroupDescription: Cluster communication with worker nodes
-        VpcId: !Ref VPC
+            GroupDescription: Cluster communication with worker nodes
+            VpcId: !Ref VPC
     # ProfileWithRolesForOurApp:
     #   Type: AWS::IAM::InstanceProfile
     #   Properties: 
