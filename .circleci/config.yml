@@ -103,7 +103,6 @@ jobs:
             --stack-name "capstone-${CIRCLE_WORKFLOW_ID:0:7}" \
             --template-body file://infra/infra-iac.yml \
             --parameters file://infra/iac-params.json \
-            --capabilities "CAPABILITY_NAMED_IAM" \
             --region=$AWS_DEFAULT_REGION \         
             --tags project=capstone
 
