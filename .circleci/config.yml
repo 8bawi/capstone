@@ -142,12 +142,18 @@ jobs:
           name: Ensure eks-cluster infrastructure exist
           command: |
             aws cloudformation deploy \
-              --template-file infra/eks-cluster.yml \
-              --stack-name capstone-eks-cluster-$CIRCLE_BRANCH \
-              --s3-bucket cap-cloudformation-artifacts-bucket  \ 
-              --capabilities CAPABILITY_NAMED_IAM \
-              --no-fail-on-empty-changeset \
-              --tags Name=CapKubernetesCluster-$CIRCLE_BRANCH
+             --template-file infra/eks-cluster.yml \
+             --stack-name capstone-eks-cluster-$CIRCLE_BRANCH \
+             --s3-bucket cap-cloudformation-artifacts-bucket  \ 
+             --region $AWS_DEFAULT_REGION \
+             --no-fail-on-empty-changeset \
+             --tags project=capstone          
+          #  aws cloudformation deploy \
+          #    --template-file infra/eks-cluster.yml \
+          #    --stack-name capstone-eks-cluster-$CIRCLE_BRANCH \
+          #    --s3-bucket cap-cloudformation-artifacts-bucket  \ 
+          #    --no-fail-on-empty-changeset \
+          #    --tags Name=CapKubernetesCluster-$CIRCLE_BRANCH
           #  aws cloudformation deploy \
           #    --template-file infra/eks-cluster.yml \
           #    --tags project=capstone \
