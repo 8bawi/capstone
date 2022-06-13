@@ -1,6 +1,15 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: Deploy Managed Kubernetes Resources - Cluster
+Parameters:
+  # Paramenters are entirely optional.
+  # but using them will make your cloudformation templates more reusable
+  # use them for things that may change over time, such as instance type,
+  # VPCs and so on.
+    EnvironmentName:
+        Description: The Name of the Env
+        Type: String
+        Default: CapstoneProject
 
 Resources:
   CapKubeCluster:
