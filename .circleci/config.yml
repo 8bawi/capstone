@@ -103,7 +103,7 @@ jobs:
              --template-file infra/infra-iac.yml \
              --stack-name capstone-$CIRCLE_BRANCH \
              --region $AWS_DEFAULT_REGION \
-             -- tags project=capstone
+             --tags project=capstone
         #    # if test $(echo $(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE|grep -i creationtime>/dev/null;echo $?)) -eq 1 
         #    # then aws cloudformation create-stack \
         #    #   --stack-name capstone-$CIRCLE_BRANCH \
