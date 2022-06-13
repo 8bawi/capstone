@@ -172,8 +172,8 @@ jobs:
           name: Make sure eks is working
           command: |
             aws eks update-kubeconfig --region $AWS_REGION  --name Capstone-Cluster-$CIRCLE_BRANCH
-      - destroy-environment:
-          workflow_id: $CIRCLE_BRANCH
+      # - destroy-environment:
+      #     workflow_id: $CIRCLE_BRANCH
           
   deploy-eks-addon-and-nodegroup:
     docker:
@@ -186,13 +186,13 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file cloudformation/eks-nodegroup.yaml \
-              --stack-name "cap-eks-nodegroup-$CIRCLE_BRANCH \   
-              --s3-bucket "cap-cloudformation-artifacts-bucket \                         
+              --stack-name cap-eks-nodegroup-$CIRCLE_BRANCH \   
+              --s3-bucket cap-cloudformation-artifacts-bucket \                         
               --capabilities CAPABILITY_NAMED_IAM \
               --no-fail-on-empty-changeset \
-              --tags Name='eks_worker_nodes_$CIRCLE_BRANCH'
-      - destroy-environment:
-          workflow_id: $CIRCLE_BRANCH
+              --tags Name=eks_worker_nodes_$CIRCLE_BRANCH
+      # - destroy-environment:
+      #     workflow_id: $CIRCLE_BRANCH
  
 workflows:
   default:
@@ -215,11 +215,11 @@ workflows:
           filters:
             branches:
               only: [blue, green]                     
-      # - check-if-eks-is-working:
-      #     requires: [deploy-eks]
-      #     filters:
-      #       branches:
-      #         only: [blue, green]       
+      - check-if-eks-is-working:
+          requires: [deploy-eks]
+          filters:
+            branches:
+              only: [blue, green]       
       # - deploy-eks-addon-and-nodegroup:
       #     requires: [deploy-eks]
       #     filters:
