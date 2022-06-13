@@ -19,7 +19,7 @@ Resources:
       ResourcesVpcConfig:
         SubnetIds:
           ## As stated in section above, populate these with your current VPC subnet IDs
-          - Fn::ImportValue: CapstoneProject-PubSub1Id
+          - Fn::ImportValue: CapstoneProject-PriSub1Id
           - Fn::ImportValue: CapstoneProject-PubSub2ID
           - Fn::ImportValue: CapstoneProject-PriSub1ID
           - Fn::ImportValue: CapstoneProject-PriSub2ID
