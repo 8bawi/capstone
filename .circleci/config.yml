@@ -171,7 +171,7 @@ jobs:
       - run: 
           name: Install dependencies
           command: |
-            apt-get update && apt-get upgrade
+            apt-get update && apt-get upgrade -y
             apt-get install curl  
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
@@ -219,22 +219,25 @@ jobs:
       #     workflow_id: $CIRCLE_BRANCH
   deployments:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: ubuntu:18.04
     working_directory: ~/repo        
     steps:
       - checkout 
       - run: 
           name: Install dependencies
           command: |
-            apk add --update curl  
-            pip3 install awscli          
-      - run:
-          name: Deployment
-          command: |
+            apt-get update && apt-get upgrade -y
+            apt-get install curl  
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install   
             curl -o kubectl https://s3.cn-north-1.amazonaws.com.cn/amazon-eks/1.20.4/2021-04-12/bin/darwin/amd64/kubectl
             chmod +x ./kubectl
             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
-            echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
+            echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile         
+      - run:
+          name: Deployment
+          command: |
             kubectl version --short --client
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster            
             kubectl create -f mainfests/deployment.yml
