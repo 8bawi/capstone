@@ -186,7 +186,7 @@ jobs:
             pwd
             ls -l
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            kubectl get pods --all-namespace
+            kubectl get pods --all-namespaces
       #    kubectl version --short --client      
       # - destroy-environment:
       #     workflow_id: $CIRCLE_BRANCH
