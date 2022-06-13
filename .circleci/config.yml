@@ -205,7 +205,7 @@ jobs:
           #    --tags Name=eks_worker_nodes_$CIRCLE_BRANCH
       # - destroy-environment:
       #     workflow_id: $CIRCLE_BRANCH
-   deployments:
+  deployments:
     docker:
       - image: amazon/aws-cli
     working_directory: ~/repo        
