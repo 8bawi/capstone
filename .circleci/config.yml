@@ -183,12 +183,10 @@ jobs:
       - run:
           name: Make sure eks is working
           command: |
-            curl -o kubectl https://s3.cn-north-1.amazonaws.com.cn/amazon-eks/1.20.4/2021-04-12/bin/darwin/amd64/kubectl
-            chmod +x ./kubectl
-            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
-            echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
+            pwd
+            ls -l
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            ./kubectl get pods --all-namespace
+            kubectl get pods --all-namespace
       #    kubectl version --short --client      
       # - destroy-environment:
       #     workflow_id: $CIRCLE_BRANCH
@@ -238,16 +236,18 @@ jobs:
       - run:
           name: Deployment
           command: |
+            pwd
+            ls -l
             kubectl version --short --client
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster            
-            ./kubectl create -f mainfests/deployment.yml
+            kubectl create -f mainfests/deployment.yml
 
 
       - run:
           name: service
           command: |     
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            ./kubectl create -f mainfests/service.yml     
+            kubectl create -f mainfests/service.yml     
           
 workflows:
   default:
