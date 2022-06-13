@@ -99,12 +99,17 @@ jobs:
       - run:
           name: check if VPC infra already exists
           command: |
-            if test $(echo $(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE|grep -i creationtime>/dev/null;echo $?)) -eq 1 
-            then aws cloudformation create-stack \
-              --stack-name capstone-$CIRCLE_BRANCH \
-              --template-body file://infra/infra-iac.yml \
-              --region $AWS_DEFAULT_REGION ;
-            fi;
+            aws cloudformation deploy \
+             --template-file infra/infra-iac.yml \
+             --stack-name capstone-$CIRCLE_BRANCH \
+             --region $AWS_DEFAULT_REGION \
+             -- tags project=capstone
+        #    # if test $(echo $(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE|grep -i creationtime>/dev/null;echo $?)) -eq 1 
+        #    # then aws cloudformation create-stack \
+        #    #   --stack-name capstone-$CIRCLE_BRANCH \
+        #    #   --template-body file://infra/infra-iac.yml \
+        #    #   --region $AWS_DEFAULT_REGION ;
+        #    # fi;
       # - run:
       #     name: Ensure VPC infrastructure exists
       #     command: |
@@ -137,9 +142,9 @@ jobs:
           name: Ensure eks-cluster infrastructure exist
           command: |
             aws cloudformation deploy \
-              --s3-bucket "cap-cloudformation-artifacts-bucket"  \ 
               --template-file infra/eks-cluster.yml \
               --stack-name "capstone-eks-cluster-$CIRCLE_BRANCH" \
+              --s3-bucket "cap-cloudformation-artifacts-bucket"  \ 
               --capabilities CAPABILITY_NAMED_IAM \
               --no-fail-on-empty-changeset \
               --tags Name='CapKubernetesCluster-$CIRCLE_BRANCH'
@@ -174,13 +179,12 @@ jobs:
           name: Ensure eks-addon and NodeGroup infrastructure exist
           command: |
             aws cloudformation deploy \
-              --s3-bucket "cap-cloudformation-artifacts-bucket \
               --template-file cloudformation/eks-nodegroup.yaml \
-              --stack-name "cap-eks-nodegroup-$CIRCLE_BRANCH \
+              --stack-name "cap-eks-nodegroup-$CIRCLE_BRANCH \   
+              --s3-bucket "cap-cloudformation-artifacts-bucket \                         
               --capabilities CAPABILITY_NAMED_IAM \
               --no-fail-on-empty-changeset \
-              --tags \
-                Name='eks_worker_nodes_$CIRCLE_BRANCH'
+              --tags Name='eks_worker_nodes_$CIRCLE_BRANCH'
       - destroy-environment:
           workflow_id: $CIRCLE_BRANCH
  
