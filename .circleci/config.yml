@@ -215,7 +215,7 @@ workflows:
           filters:
             branches:
               only: [blue, green]                     
-      - check-if-eks-is-working:
+      - check-eks-working:
           requires: [deploy-eks]
           filters:
             branches:
