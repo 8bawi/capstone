@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app_$COLOR_TEST
+  name: app-green
   labels:
     app: app
-    color: $COLOR_TEST
+    color: green
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: app
-      color: $COLOR_TEST
+      color: green
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: app
-        color: $COLOR_TEST
+        color: green
     spec:
       containers:
-      - name: app
-        image: $DOCKER_USERNAME/capstoneProject:$COLOR
-        ports:
-        - containerPort: 80
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 80
+        - name: app
+          image: mada96/capstone_project:green
+          ports:
+          - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
