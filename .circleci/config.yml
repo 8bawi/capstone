@@ -187,7 +187,6 @@ jobs:
             aws cloudformation deploy \
               --template-file cloudformation/eks-nodegroup.yaml \
               --stack-name cap-eks-nodegroup-$CIRCLE_BRANCH \   
-              --s3-bucket cap-cloudformation-artifacts-bucket \                         
               --capabilities CAPABILITY_NAMED_IAM \
               --no-fail-on-empty-changeset \
               --tags Name=eks_worker_nodes_$CIRCLE_BRANCH
