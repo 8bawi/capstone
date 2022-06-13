@@ -240,14 +240,14 @@ jobs:
             ls -l
             kubectl version --short --client
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster            
-            kubectl create -f mainfests/deployment.yml
+            kubectl create -f manifests/deployment.yml
 
 
       - run:
           name: service
           command: |     
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            kubectl create -f mainfests/service.yml     
+            kubectl create -f manifests/service.yml     
           
 workflows:
   default:
