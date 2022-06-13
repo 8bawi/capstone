@@ -171,7 +171,7 @@ jobs:
       - run: 
           name: Install dependencies
           command: |
-            apt-get update && apt-get upgrade -y
+            apt-get update
             apt-get install curl  
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
@@ -226,7 +226,7 @@ jobs:
       - run: 
           name: Install dependencies
           command: |
-            apt-get update && apt-get upgrade -y
+            apt-get update 
             apt-get install curl  
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
@@ -281,7 +281,7 @@ workflows:
             branches:
               only: [blue, green]
       - deployments:
-          requires: [deploy-eks-addon-and-nodegroup]
+          requires: [deploy-eks-addon-and-nodegroup, check-eks-working]
           filters:
             branches:
               only: [blue, green]      
