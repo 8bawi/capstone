@@ -171,7 +171,7 @@ jobs:
       - run:
           name: Make sure eks is working
           command: |
-            aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster-$CIRCLE_BRANCH
+            aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
       # - destroy-environment:
       #     workflow_id: $CIRCLE_BRANCH
           
