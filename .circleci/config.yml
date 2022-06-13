@@ -259,4 +259,9 @@ workflows:
           requires: [deploy-eks]
           filters:
             branches:
-              only: [blue, green]       
+              only: [blue, green]
+      - deployments:
+          requires: [deploy-eks-addon-and-nodegroup]
+          filters:
+            branches:
+              only: [blue, green]      
