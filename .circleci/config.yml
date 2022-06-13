@@ -144,7 +144,6 @@ jobs:
             aws cloudformation deploy \
              --template-file infra/eks-cluster.yml \
              --stack-name capstone-eks-cluster-$CIRCLE_BRANCH \
-             --s3-bucket cap-cloudformation-artifacts-bucket  \ 
              --region $AWS_DEFAULT_REGION \
              --no-fail-on-empty-changeset \
              --tags project=capstone          
