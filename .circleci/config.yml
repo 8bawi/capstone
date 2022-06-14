@@ -234,6 +234,15 @@ jobs:
       #       mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
       #       echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile         
       - run:
+          name: helm
+          command: |
+            pwd
+            ls -l
+            helm repo add eks https://aws.github.io/eks-charts
+            aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
+            kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+            helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer
+      - run:
           name: Deployment
           command: |
             pwd
