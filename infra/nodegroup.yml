@@ -1,7 +1,15 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: Deploy Managed Kubernetes Resources - Worker Nodes
-
+Parameters:
+  # Paramenters are entirely optional.
+  # but using them will make your cloudformation templates more reusable
+  # use them for things that may change over time, such as instance type,
+  # VPCs and so on.
+    EnvironmentName:
+        Description: The Name of the Env
+        Type: String
+        Default: capstone-green
 Resources:
   CapKubeNodeGroupRole:
     Type: AWS::IAM::Role
@@ -37,7 +45,7 @@ Resources:
         app: app
       Subnets:
           - !ImportValue 
-              'Fn::Sub': '${capstone-green}-PriSub1Id'
+              'Fn::Sub': '${EnvironmentName}-PriSub1Id'
           - !ImportValue 
-              'Fn::Sub': '${capstone-green}-PriSub2Id'
+              'Fn::Sub': '${EnvironmentName}-PriSub2Id'
       Tags: {"eks_role": "node_group"}

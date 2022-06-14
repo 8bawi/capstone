@@ -9,7 +9,7 @@ Parameters:
     EnvironmentName:
         Description: The Name of the Env
         Type: String
-        Default: CapstoneProject
+        Default: capstone-green
 
 Resources:
   CapKubeCluster:
@@ -20,13 +20,13 @@ Resources:
         SubnetIds:
           ## As stated in section above, populate these with your current VPC subnet IDs
           - !ImportValue 
-              'Fn::Sub': '${capstone-green}-PubSub1Id'
+              'Fn::Sub': '${EnvironmentName}-PubSub1Id'
           - !ImportValue 
-              'Fn::Sub': '${capstone-green}-PubSub2Id'
+              'Fn::Sub': '${EnvironmentName}-PubSub2Id'
           - !ImportValue 
-              'Fn::Sub': '${capstone-green}-PriSub1Id'
+              'Fn::Sub': '${EnvironmentName}-PriSub1Id'
           - !ImportValue 
-              'Fn::Sub': '${capstone-green}-PriSub2Id'
+              'Fn::Sub': '${EnvironmentName}-PriSub2Id'
       RoleArn: !GetAtt CapKubeClusterRole.Arn
       Version: "1.20"
 
