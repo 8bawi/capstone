@@ -253,31 +253,36 @@ Outputs:
         Description:  The ID of the VPC
         Value:  !Ref  VPC
         Export: 
-            Name: !Sub  ${EnvironmentName}-VPCID
+            Name: 
+                'Fn::Sub': '${AWS::StackName}-VPCID'
     
     PubSub1ID:
         Description:  The ID of the 1st Public Subnet
         Value: !Ref PublicSubnet1Structure
         Export: 
-            Name: !Sub ${EnvironmentName}-PubSub1Id
+            Name:
+                'Fn::Sub': '${AWS::StackName}-PubSub1Id'
 
     PubSub2ID:
         Description:  The ID of the 2nd Public Subnet
         Value: !Ref PublicSubnet2Structure
-        Export: 
-            Name: !Sub ${EnvironmentName}-PubSub2Id
+        Export:
+            Name: 
+                'Fn::Sub': '${AWS::StackName}-PubSub2Id'
 
     PriSub1ID:
         Description:  The ID of the 1st Private Subnet
         Value: !Ref PrivateSubnet1Structure
         Export: 
-            Name: !Sub ${EnvironmentName}-PriSub1Id
+            Name: 
+                'Fn::Sub': '${AWS::StackName}-PriSub1Id'
 
     PriSub2ID:
         Description:  The ID of the 2nd Private Subnet
         Value: !Ref PrivateSubnet2Structure
         Export: 
-            Name: !Sub ${EnvironmentName}-PriSub2Id
+            Name:
+                'Fn::Sub': '${AWS::StackName}-PriSub2Id'
             
     SecurityGroups:
         Description: Security group for the cluster control plane communication with worker nodes

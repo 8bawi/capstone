@@ -19,10 +19,14 @@ Resources:
       ResourcesVpcConfig:
         SubnetIds:
           ## As stated in section above, populate these with your current VPC subnet IDs
-          - Fn::ImportValue: ${EnvironmentName}-PubSub1Id
-          - Fn::ImportValue: ${EnvironmentName}-PubSub2Id
-          - Fn::ImportValue: ${EnvironmentName}-PriSub1Id
-          - Fn::ImportValue: ${EnvironmentName}-PriSub2Id
+          - !ImportValue 
+              'Fn::Sub': '${capstone-green}-PubSub1Id'
+          - !ImportValue 
+              'Fn::Sub': '${capstone-green}-PubSub2Id'
+          - !ImportValue 
+              'Fn::Sub': '${capstone-green}-PriSub1Id'
+          - !ImportValue 
+              'Fn::Sub': '${capstone-green}-PriSub2Id'
       RoleArn: !GetAtt CapKubeClusterRole.Arn
       Version: "1.20"
 

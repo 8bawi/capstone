@@ -36,6 +36,8 @@ Resources:
         cap-kube-node-group: True
         app: app
       Subnets:
-        - Fn::ImportValue: CapstoneProject-PriSub1Id
-        - Fn::ImportValue: CapstoneProject-PriSub2Id
+          - !ImportValue 
+              'Fn::Sub': '${capstone-green}-PriSub1Id'
+          - !ImportValue 
+              'Fn::Sub': '${capstone-green}-PriSub2Id'
       Tags: {"eks_role": "node_group"}
