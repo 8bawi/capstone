@@ -241,7 +241,10 @@ jobs:
             helm repo add eks https://aws.github.io/eks-charts
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
             kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-            helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer
+            if test $(echo $(helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer|grep -i creationtime>/dev/null;echo $?)) -eq 1 
+            then echo "Already exist"
+            fi;            
+            # helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer
       - run:
           name: Deployment
           command: |
