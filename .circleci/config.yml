@@ -243,10 +243,10 @@ jobs:
             ls -l
             helm repo add eks https://aws.github.io/eks-charts
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            eksctl utils associate-iam-oidc-provider --region region-code --cluster Capstone-Cluster --approve
+            eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster Capstone-Cluster --approve
             curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
             aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
-            eksctl create iamserviceaccount --cluster=your-cluster --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::YOUR_AWS_ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
+            eksctl create iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
             kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
             #VPC_USED=echo $(aws ec2 describe-vpcs --filter Name=tag:Name,Values=CapstoneProject --query Vpcs[].VpcId --output text)
             if test $(echo $(helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller -n kube-system;echo $?)) -eq 1 
