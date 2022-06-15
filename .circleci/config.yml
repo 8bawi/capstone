@@ -96,6 +96,10 @@ jobs:
     working_directory: ~/repo        
     steps:
       - checkout
+      - run:  
+          name: extend timeout
+          command: . ./ourlongscript.sh
+          no_output_timeout: 30m
       - run:
           name: check if VPC infra already exists
           command: |
@@ -137,7 +141,11 @@ jobs:
       - image: amazon/aws-cli
     working_directory: ~/repo        
     steps:
-      - checkout              
+      - checkout 
+      - run:  
+          name: extend timeout
+          command: . ./ourlongscript.sh
+          no_output_timeout: 30m                   
       - run:
           name: Ensure eks-cluster infrastructure exist
           command: |
@@ -196,7 +204,11 @@ jobs:
       - image: amazon/aws-cli
     working_directory: ~/repo        
     steps:
-      - checkout          
+      - checkout
+      - run:  
+          name: extend timeout
+          command: . ./ourlongscript.sh
+          no_output_timeout: 30m                
       - run:
           name: Ensure eks-addon and NodeGroup infrastructure exist
           command: |
@@ -241,7 +253,7 @@ jobs:
             helm repo add eks https://aws.github.io/eks-charts
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
             kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-            VPC_USED=echo $(aws ec2 describe-vpcs |grep -i vpcid|awk '{print $2}'|tr -d '"'|tr -d ',')
+            VPC_USED=echo $(aws ec2 describe-vpcs --filter Name=tag:Name,Values=CapstoneProject --query Vpcs[].VpcId --output text)
             if test $(echo $(helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=Capstone-Cluster  --set serviceAccount.create=false --set region=us-east-1 --set vpcId= $VPC_USED --set serviceAccount.name=aws-load-balancer-controller -n kube-system|grep -i creationtime>/dev/null;echo $?)) -eq 1 
             then echo "Already exist"
             fi;            
