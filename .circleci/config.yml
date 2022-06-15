@@ -254,7 +254,9 @@ jobs:
             eksctl delete iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller
             eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster Capstone-Cluster --approve
             curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
-            aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+            if test $(echo $(aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json;echo $?)) -eq 1 
+            then echo "Already exist"
+            fi; 
             eksctl create iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
             kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
             #VPC_USED=echo $(aws ec2 describe-vpcs --filter Name=tag:Name,Values=CapstoneProject --query Vpcs[].VpcId --output text)
