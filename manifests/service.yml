@@ -7,6 +7,7 @@ spec:
     - port: 80
       targetPort: 80
       protocol: TCP
+      nodePort: 30007
   type: NodePort
   selector:
     app: app
@@ -45,4 +46,4 @@ spec:
           pathType: Prefix
           backend:
             serviceName: app
-            servicePort: 80    
+            servicePort: 30007  
