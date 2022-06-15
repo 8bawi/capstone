@@ -96,10 +96,6 @@ jobs:
     working_directory: ~/repo        
     steps:
       - checkout
-      - run:  
-          name: extend timeout
-          command: . ./ourlongscript.sh
-          no_output_timeout: 30m
       - run:
           name: check if VPC infra already exists
           command: |
@@ -108,6 +104,7 @@ jobs:
              --stack-name capstone-$CIRCLE_BRANCH \
              --region $AWS_DEFAULT_REGION \
              --tags project=capstone
+          no_output_timeout: 30m   
         #    # if test $(echo $(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE|grep -i creationtime>/dev/null;echo $?)) -eq 1 
         #    # then aws cloudformation create-stack \
         #    #   --stack-name capstone-$CIRCLE_BRANCH \
@@ -142,10 +139,6 @@ jobs:
     working_directory: ~/repo        
     steps:
       - checkout 
-      - run:  
-          name: extend timeout
-          command: . ./ourlongscript.sh
-          no_output_timeout: 30m                   
       - run:
           name: Ensure eks-cluster infrastructure exist
           command: |
@@ -155,7 +148,8 @@ jobs:
              --capabilities CAPABILITY_IAM \
              --region $AWS_DEFAULT_REGION \
              --no-fail-on-empty-changeset \
-             --tags project=capstone          
+             --tags project=capstone
+          no_output_timeout: 30m             
           #  aws cloudformation deploy \
           #    --template-file infra/eks-cluster.yml \
           #    --stack-name capstone-eks-cluster-$CIRCLE_BRANCH \
@@ -205,10 +199,6 @@ jobs:
     working_directory: ~/repo        
     steps:
       - checkout
-      - run:  
-          name: extend timeout
-          command: . ./ourlongscript.sh
-          no_output_timeout: 30m                
       - run:
           name: Ensure eks-addon and NodeGroup infrastructure exist
           command: |
@@ -219,6 +209,7 @@ jobs:
              --region $AWS_DEFAULT_REGION \
              --no-fail-on-empty-changeset \
              --tags Name=eks_worker_nodes_$CIRCLE_BRANCH
+          no_output_timeout: 30m   
           #  aws cloudformation deploy \
           #    --template-file infra/nodegroup.yaml \
           #    --stack-name cap-eks-nodegroup-$CIRCLE_BRANCH \
