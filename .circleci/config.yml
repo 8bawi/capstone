@@ -243,7 +243,7 @@ jobs:
             ls -l
             helm repo add eks https://aws.github.io/eks-charts
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            eksctl utils associate-iam-oidc-provider --region region-code --cluster your-cluster-name --approve
+            eksctl utils associate-iam-oidc-provider --region region-code --cluster Capstone-Cluster --approve
             curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
             aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
             eksctl create iamserviceaccount --cluster=your-cluster --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::YOUR_AWS_ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
