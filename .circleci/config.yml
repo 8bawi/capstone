@@ -257,7 +257,7 @@ jobs:
           name: Deployment
           command: |
             pwd
-            ls -l
+            ls -l 
             kubectl version --short --client
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster            
             kubectl apply -f manifests/deployment.yml
