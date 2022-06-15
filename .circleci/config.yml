@@ -20,7 +20,15 @@ commands:
             aws cloudformation delete-stack --stack-name capstone-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name capstone-eks-cluster-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name cap-eks-nodegroup-<< parameters.workflow_id >>
-            aws s3 rm s3://cap-cloudformation-artifacts-bucket-<< parameters.workflow_id >>  --recursive            
+            aws s3 rm s3://cap-cloudformation-artifacts-bucket-<< parameters.workflow_id >>  --recursive  
+  remove-iam:
+    description: remove service account on IAM.
+    steps: 
+      - run: 
+          name: Remove
+          when: on_fail
+          command: |
+            eksctl create iamserviceaccount --name=aws-load-balancer-controller
 
 
 jobs:
@@ -243,6 +251,7 @@ jobs:
             ls -l
             helm repo add eks https://aws.github.io/eks-charts
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
+            eksctl delete iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller
             eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster Capstone-Cluster --approve
             curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
             aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
