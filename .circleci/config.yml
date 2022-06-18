@@ -271,7 +271,6 @@ jobs:
             kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
             kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
             kubectl apply -f manifests/ingress-controller.yaml
-            fi; 
             if test $(echo $(aws iam attach-role-policy --policy-arn arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --role-name capstone-role;echo $?)) -eq 1 
             then echo "Already exist"
             fi; 
