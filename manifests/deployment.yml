@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: mada96/capstone_project:green
+          image: mada96/capstone_project:blue
           ports:
           - containerPort: 80
           readinessProbe:
