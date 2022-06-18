@@ -33,7 +33,7 @@ Resources:
     Properties:
       ClusterName: !ImportValue cap-kube-cluster-name
       NodeRole: !GetAtt CapKubeNodeGroupRole.Arn
-      NodegroupName: Capstone_node_group
+      NodegroupName: Capstone_node_group_blue
       InstanceTypes:
         - t3.large
       ScalingConfig:
