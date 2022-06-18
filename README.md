@@ -1,4 +1,4 @@
-[![CircleCI](https://app.circleci.com/gh/Gharabawi/capstone.svg?style=svg)](https://app.circleci.com/pipelines/github/Gharabawi/capstone)
+[![CircleCI](https://app.circleci.com/gh/Gharabawi/capstone/tree/green.svg?style=svg)]([https://circleci.com/gh/circleci/circleci-docs/](https://app.circleci.com/pipelines/github/Gharabawi)?branch=green)
 
 
 ## Project Overview
