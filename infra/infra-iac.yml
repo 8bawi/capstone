@@ -108,7 +108,7 @@ Resources:
             Tags:
                 - Key:  Name
                   Value:  !Sub ${EnvironmentName}-pri1
-                - Key: kubernetes.io/role/elb
+                - Key: kubernetes.io/role/internal-elb
                   Value: 1                    
 
     PrivateSubnet2Structure:
@@ -120,7 +120,7 @@ Resources:
             Tags:
                 - Key:  Name
                   Value:  !Sub ${EnvironmentName}-pri2
-                - Key: kubernetes.io/role/elb
+                - Key: kubernetes.io/role/internal-elb
                   Value: 1                    
     
     Nat1EIP:

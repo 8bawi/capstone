@@ -261,10 +261,19 @@ jobs:
             ls -l
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
             eksctl utils associate-iam-oidc-provider --cluster Capstone-Cluster --approve
+
             curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.1/docs/install/iam_policy.json
             if test $(echo $(aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json;echo $?)) -eq 1 
             then echo "Already exist"
             fi; 
+            eksctl create iamserviceaccount \
+              --name aws-load-balancer-controller \
+              --namespace kube-system \
+              --cluster Capstone-Cluster \
+              --role-name capstone-role \
+              --attach-policy-arn arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy \
+              --approve \
+              --override-existing-serviceaccounts            
             if test $(echo $(aws iam attach-role-policy --policy-arn arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --role-name capstone-role;echo $?)) -eq 1 
             then echo "Already exist"
             fi;             
