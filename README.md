@@ -1,4 +1,8 @@
-[![CircleCI](https://app.circleci.com/pipelines/github/Gharabawi/capstone?style=svg)](https://app.circleci.com/pipelines/github/Gharabawi/capstone)
+<<<<<<< HEAD
+[![CircleCI](https://app.circleci.com/gh/Gharabawi/capstone/tree/green.svg?style=svg)]([https://circleci.com/gh/circleci/circleci-docs/](https://app.circleci.com/pipelines/github/Gharabawi)?branch=green)
+=======
+[![CircleCI](https://app.circleci.com/gh/Gharabawi/capstone/tree/green.svg?style=svg)]([https://circleci.com/gh/circleci/circleci-docs/](https://app.circleci.com/pipelines/github/Gharabawi)?branch=green)
+>>>>>>> df2819084ca7ca8595553c19f2b1f88ea5171e78
 
 
 ## Project Overview
