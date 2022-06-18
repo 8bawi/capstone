@@ -17,10 +17,10 @@ commands:
           when: on_fail
           command: |
             echo  Destroy environments << parameters.workflow_id >> 
-            aws cloudformation delete-stack --stack-name capstone-<< parameters.workflow_id >>
-            aws cloudformation delete-stack --stack-name capstone-eks-cluster-<< parameters.workflow_id >>
-            aws cloudformation delete-stack --stack-name cap-eks-nodegroup-<< parameters.workflow_id >>
-            aws s3 rm s3://cap-cloudformation-artifacts-bucket-<< parameters.workflow_id >>  --recursive  
+            aws cloudformation delete-stack --stack-name capstone-project
+            aws cloudformation delete-stack --stack-name capstone-eks-cluster-project
+            aws cloudformation delete-stack --stack-name cap-eks-nodegroup-project
+            
   remove-iam:
     description: remove service account on IAM.
     steps: 
@@ -109,7 +109,7 @@ jobs:
           command: |
             aws cloudformation deploy \
              --template-file infra/infra-iac.yml \
-             --stack-name capstone-$CIRCLE_BRANCH \
+             --stack-name capstone-project \
              --region $AWS_DEFAULT_REGION \
              --tags project=capstone
           no_output_timeout: 30m   
@@ -139,7 +139,7 @@ jobs:
           #    --tags project=capstone \
           #    --region=$AWS_DEFAULT_REGION              
       - destroy-environment:
-          workflow_id: $CIRCLE_BRANCH    
+          workflow_id: project    
 
   deploy-eks:
     docker:
@@ -152,7 +152,7 @@ jobs:
           command: |
             aws cloudformation deploy \
              --template-file infra/eks-cluster.yml \
-             --stack-name capstone-eks-cluster-$CIRCLE_BRANCH \
+             --stack-name capstone-eks-cluster-project \
              --capabilities CAPABILITY_IAM \
              --region $AWS_DEFAULT_REGION \
              --no-fail-on-empty-changeset \
@@ -212,11 +212,11 @@ jobs:
           command: |
             aws cloudformation deploy \
              --template-file infra/nodegroup.yml \
-             --stack-name cap-eks-nodegroup-$CIRCLE_BRANCH \
+             --stack-name cap-eks-nodegroup-project \
              --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
              --region $AWS_DEFAULT_REGION \
              --no-fail-on-empty-changeset \
-             --tags Name=eks_worker_nodes_$CIRCLE_BRANCH
+             --tags Name=eks_worker_nodes_project
           no_output_timeout: 30m   
           #  aws cloudformation deploy \
           #    --template-file infra/nodegroup.yaml \
