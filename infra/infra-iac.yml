@@ -59,6 +59,8 @@ Resources:
             Tags:
                 - Key: Name
                   Value:  !Ref EnvironmentName
+                - Key: kubernetes.io/cluster/Capstone-Cluster
+                  Value: shared
 
     InternetGateway:
         Type: AWS::EC2::InternetGateway
