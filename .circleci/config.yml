@@ -20,7 +20,7 @@ commands:
             aws cloudformation delete-stack --stack-name capstone-project
             aws cloudformation delete-stack --stack-name capstone-eks-cluster-project
             aws cloudformation delete-stack --stack-name cap-eks-nodegroup-project
-            
+          
   remove-iam:
     description: remove service account on IAM.
     steps: 
@@ -139,7 +139,7 @@ jobs:
           #    --tags project=capstone \
           #    --region=$AWS_DEFAULT_REGION              
       - destroy-environment:
-          workflow_id: $CIRCLE_BRANCH    
+          workflow_id: project    
 
   deploy-eks:
     docker:
