@@ -11,7 +11,7 @@ spec:
   type: NodePort
   selector:
     app: app
-    color: green
+    color: blue
 # apiVersion: v1
 # kind: Service
 # metadata:
