@@ -9,7 +9,7 @@ Parameters:
     EnvironmentName:
         Description: The Name of the Env
         Type: String
-        Default: capstone-green
+        Default: capstone-project
 Resources:
   CapKubeNodeGroupRole:
     Type: AWS::IAM::Role
