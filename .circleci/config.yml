@@ -243,27 +243,37 @@ jobs:
       #       curl -o kubectl https://s3.cn-north-1.amazonaws.com.cn/amazon-eks/1.20.4/2021-04-12/bin/darwin/amd64/kubectl
       #       chmod +x ./kubectl
       #       mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
-      #       echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile         
+      #       echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile   
+      # eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster Capstone-Cluster --approve   
+      # helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer   
+      #VPC_USED=echo $(aws ec2 describe-vpcs --filter Name=tag:Name,Values=CapstoneProject --query Vpcs[].VpcId --output text)
+      #eksctl delete iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller
+      # helm repo add eks https://aws.github.io/eks-charts
+      #eksctl create iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
+      #kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+      #            if test $(echo $(helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller -n kube-system;echo $?)) -eq 1 
+      #      then echo "Already exist"
+      #      fi;
       - run:
           name: helm
           command: |
             pwd
             ls -l
-            helm repo add eks https://aws.github.io/eks-charts
             aws eks update-kubeconfig --region $AWS_DEFAULT_REGION  --name Capstone-Cluster
-            eksctl delete iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller
-            eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster Capstone-Cluster --approve
-            curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
+            eksctl utils associate-iam-oidc-provider --cluster Capstone-Cluster --approve
+            curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.1/docs/install/iam_policy.json
             if test $(echo $(aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json;echo $?)) -eq 1 
             then echo "Already exist"
             fi; 
-            eksctl create iamserviceaccount --cluster=Capstone-Cluster --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
-            kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-            #VPC_USED=echo $(aws ec2 describe-vpcs --filter Name=tag:Name,Values=CapstoneProject --query Vpcs[].VpcId --output text)
-            if test $(echo $(helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller -n kube-system;echo $?)) -eq 1 
+            if test $(echo $(aws iam attach-role-policy --policy-arn arn:aws:iam::147129310048:policy/AWSLoadBalancerControllerIAMPolicy --role-name capstone-role;echo $?)) -eq 1 
             then echo "Already exist"
-            fi;            
-            # helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=Capstone-Cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer
+            fi;             
+            
+            kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v2.4.1/cert-manager.yaml
+            kubectl apply -f manifests/ingress-controller.yaml
+            
+            
+            
       - run:
           name: Deployment
           command: |

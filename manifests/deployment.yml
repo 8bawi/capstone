@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-green
+  name: app-green-deploy
   labels:
-    app: app
+    app: app-deploy
     color: green
 spec:
   replicas: 1
